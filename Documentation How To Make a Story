@@ -1,0 +1,24 @@
+HOW TO MAKE A STORY
+
+The are 11 parts of input stories:
+1. The Beginning of story (Introductory)
+2 & 3. Theses are the multiple choices. However you need to enter the format as this:
+    <<  A. ...,B. ...,C. ..., >> e.g. A. Good Time,B. Good Day,C. Good Job,
+    The First Multiple Choices are for the action needed to continue the story.
+    The Second Multiple Choices are for the action needed to end the story.
+4, 5, & 6. These are the middle stories, that resulting from the action from first multiple choices.
+    If you choose A, then result input number 4
+    If you choose B, then result input number 5
+    If you choose C, then result input number 6
+7, 8, & 9. These are the ending stories, that resulting from the action from second multiple choices.
+    If you choose A, then result input number 7   
+    If you choose B, then result input number 8    
+    If you choose C, then result input number 9
+10, & 11. These are verses from bible that you can search and quoted them for the action of choices of:
+    if you choose A, that result number 7 will have the number 10 verse/verses
+    if you choose B, that result number 8 will have the number 11 verse/verses
+
+If you still confuse, you can go to your Documents file and find folder 'Bless_Story'. There are 7 files (.txt) that you can open and 
+take a look of the format of the stories.
+
+Thank You, hope you enjoy them. GBU.  
