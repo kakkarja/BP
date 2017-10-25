@@ -1,0 +1,7 @@
+# Bless_Story Folder Position
+
+"""
+This folder by default installed directly to the user's personal data folder which is under "Documents" folder (locally). 
+If you using Onedrive Cloud "Documents" folder, it may installed there. In this case you need to copy the folder "Bless_Story" 
+to local "Documents" folder. Thank you.
+"""
