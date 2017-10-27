@@ -4,3 +4,4 @@
 **Hope you can enjoy this applications.**
 
 **Please visit https://github.com/kakkarja/BP/wiki for help.**
+**For the Story Maker https://github.com/kakkarja/BP/wiki/Story-Maker-ScreenShots Screenshots.**
