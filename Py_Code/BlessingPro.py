@@ -76,11 +76,15 @@ class Story(C_st):
 
 # Create Story Attributes
 def check_s():
+    
+    # Checking the existence of the directory
     try:
         os.chdir('%s/Documents/Bless_Story' %h_path)
     except:
         print('Please create story first!')
-        #break
+        input('Check the folder "Bless_Story" in default local "Documents" folder!' +
+              ' If it is not exist, you should find it in your OneDrive(cloud) "Documents"' +
+              ' Please copy the folder to local "Documents" folder!')
     else:
         
         # Cheking library for stories
@@ -97,7 +101,7 @@ def check_s():
             Story.ch_st = dict(enumerate(Story.ch_st))
             print('List of stories', Story.ch_st)
             
-            
+            # Unravel the chosen Story
             while True:
                 try:
                     print()
