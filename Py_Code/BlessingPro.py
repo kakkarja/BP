@@ -17,7 +17,7 @@ choices = ('A', 'B', 'C')
 class S_at:
     pass
     
-# Checking the existence of a directory
+# Storie's variables
 class C_st(S_at):
     def __init__(self):
         super().__init__()
