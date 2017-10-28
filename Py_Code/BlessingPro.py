@@ -16,18 +16,9 @@ choices = ('A', 'B', 'C')
 # Story attributes
 class S_at:
     pass
-    
-# Storie's variables
-class C_st(S_at):
-    def __init__(self):
-        super().__init__()
-        self.ch_st = self.ch_st
-        self.docr = self.docr
-        self.fix_1 = self.fix_1
-        self.fix_2 = self.fix_2
         
 # Class story to help the s_story() run smoothly
-class Story(C_st):
+class Story(S_at):
 
     def __init__ (self,ans=None,part=None):
         super().__init__()
@@ -90,8 +81,7 @@ def check_s():
         # Cheking library for stories
         num_f = len([name for name in os.listdir()])
         if num_f is 0:
-            print('Please create story first!')
-            #break
+            input('Please create story first!')
         else:
             Story.ch_st = []
             for name in os.listdir():
@@ -197,39 +187,64 @@ def s_story():
 # Start the story and running until end
 def start_story():
     check_s()
-   
-    # Initial starting
-    while True: 
-        if len(Story.docr) > 0:
-            print() 
-            s_story()
-            print()
-            aq = str(input('[C]ontinue, [R]estart, [E]nd ? ' ).upper())
-            
-            # Choosing the continuation
-            if aq == 'C':
+    try:
+        len(Story.docr) 
+    except:
+        pass
+    else:
+        
+        # Initial starting
+        while True: 
+            if len(Story.docr) > 0:
+                print() 
+                s_story()
                 print()
-                continue
-            elif aq == 'R':
-                print()
-                Story.docr = []
-                continue
-            elif aq == 'E':
-                print()
-                input('God bless you')
-                Story.docr = []
-                break
-        else:
-            
-            # Restarting and checking the availability of Stories
-            print()
-            check_s()
-            if len(Story.ch_st) > 0:
-                continue
+                aq = str(input('[C]ontinue, [R]estart, [E]nd ? ' ).upper())
+                
+                # Choosing the continuation
+                if aq == 'C':
+                    print()
+                    continue
+                elif aq == 'R':
+                    print()
+                    Story.docr = []
+                    continue
+                elif aq == 'E':
+                    print()
+                    input('God bless you')
+                    Story.docr = []
+                    break
             else:
-                input('Check the folder "Bless_Story" in default local "Documents" folder!' +
-                      ' If it is not exist, you should find it in your OneDrive(cloud) "Documents"' +
-                      ' Please copy the folder to local "Documents" folder!')
-                break
+                
+                # Restarting and checking the availability of Stories
+                print()
+                check_s()
+                continue
+                
 
 start_story()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
