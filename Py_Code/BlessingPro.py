@@ -223,28 +223,3 @@ def start_story():
                 
 
 start_story()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
