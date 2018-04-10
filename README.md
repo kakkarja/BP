@@ -11,4 +11,4 @@
 
 **This is made with GUI from Tkinter(BP.msi). The console module is removed. Please try it and enjoy it. Thank You.**
 
-![BP](https://github.com/kakkarja/BP/blob/master/BP_Pics/BP.gif)
+![bp](https://github.com/kakkarja/BP/blob/master/BP_pics/BP.gif)
