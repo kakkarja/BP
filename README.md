@@ -6,3 +6,9 @@
 **Please visit https://github.com/kakkarja/BP/wiki for help.**
 
 **For the Story Maker https://github.com/kakkarja/BP/wiki/Story-Maker-ScreenShots Screenshots.**
+
+# BP (Blessing Project) built-up with Tkinter and pyinstaller (.exe file).
+
+**This is made with GUI from Tkinter(BP.msi). The console module is removed. Please try it and enjoy it. Thank You.**
+
+![BP](https://github.com/kakkarja/BP/blob/master/BP_Pics/BP.gif)
