@@ -30,9 +30,10 @@ class Bless(S_at):
         self.asw = None
         self.root = root
         root.title("Blessing Project")
+        root.geometry("610x720+257+33")
+        root.resizable(False,  False)
         
         # Binding short-cut for keyboard
-        root.state('zoomed')
         self.root.bind('<Control-d>', self.dele)
         self.root.bind('<Control-c>', self.copy)
         self.root.bind('<Control-s>', self.save_as)
@@ -97,16 +98,19 @@ class Bless(S_at):
                     if name[-3:] == 'txt':
                         self.ch_st.append(name)
                     
-        # Create seperators, combobox, textbox, and radiobuttons
-        self.sp1 = ttk.Separator(root)
-        self.sp1.pack()
+        # Create frame, combobox, textbox, scrollbar, and radiobuttons
         self.combo = ttk.Combobox(root, values = self.ch_st, width = 30)
-        self.combo.pack()
+        self.combo.pack(side = TOP, pady = 3)
         self.combo.bind("<<ComboboxSelected>>", self.start_story)
-        self.sp2 = ttk.Separator(root)
-        self.sp2.pack(side = TOP)
-        self.stbox = Text(root, relief = 'sunken')
-        self.stbox.pack(side = BOTTOM, fill = BOTH, expand = True)
+        self.frame = Frame(root)
+        self.frame.pack(side = BOTTOM, fill = BOTH, expand = True)
+        self.scr = Scrollbar(self.frame)
+        self.scr.pack(side = RIGHT, fill = BOTH, pady = 2, padx = 1)
+        self.stbox = Text(self.frame, relief = 'sunken')
+        self.stbox.pack(side = LEFT, fill = BOTH, expand = True,
+                        padx = 2, pady = 2)
+        self.scr.config(command=self.stbox.yview)
+        self.stbox.config(yscrollcommand=self.scr.set)
         self.rb1 = Radiobutton(root, text = 'A', variable=self.st1, 
                                value = 'A', compound='left', 
                                command = self.choice, tristatevalue = 0)
@@ -167,7 +171,7 @@ class Bless(S_at):
                 self.stbox.insert(END, '\n' + 'Choose: ' + 'C')
                 self.stbox.insert(END, '\n' + fill(str(self.q2_ansC)) + '\nThe End')
                 
-    # Filling stories parts into 10 set of class properties    
+    # Filling stories parts into 9 set of class properties    
     def story(self):
         
         # Start with chosen story.
@@ -319,7 +323,7 @@ class Bless(S_at):
     def write_to_file(self,file_name):
         sen = str(self.combo.selection_get())
         try:
-            content = sen + '\n'+'\n' + self.stbox.get(1.0, 'end')
+            content = sen + '\n'+'\n' + self.stbox.get('1.0', 'end')
             with open(file_name, 'w') as the_file:
                 the_file.write(content)
         except:
