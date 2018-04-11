@@ -30,7 +30,7 @@ class Bless(S_at):
         self.asw = None
         self.root = root
         root.title("Blessing Project")
-        root.geometry("610x720+257+33")
+        root.geometry("623x720+257+33")
         root.resizable(False,  False)
         
         # Binding short-cut for keyboard
