@@ -29,7 +29,7 @@ class Bless(S_at):
         self.ch_st = []
         self.asw = None
         self.root = root
-        root.title("Blessing Project")
+        root.title("Blessing Project ✟ Story Reader and Maker")
         root.geometry("623x720+257+33")
         root.resizable(False,  False)
         
@@ -42,7 +42,10 @@ class Bless(S_at):
         self.root.bind('<Control-C>', self.copy)
         self.root.bind('<Control-S>', self.save_as)
         self.root.bind('<Control-X>', self.ex)
-        
+        self.root.bind('<Control-f>', self.refresh)
+        self.root.bind('<Control-F>', self.refresh)
+        self.root.bind('<Control-P>', self.paste)
+        self.root.bind('<Control-p>', self.paste)
         # Menu setting
         self.menu_bar = Menu(root)  # menu begins
         self.file_menu = Menu(self.menu_bar, tearoff=0)
@@ -60,6 +63,8 @@ class Bless(S_at):
         # File menu
         self.file_menu.add_command(label='Save as',  compound='left', 
                                    accelerator='Ctrl+S', command=self.save_as)
+        self.file_menu.add_command(label='Refresh File',  compound='left', 
+                                   accelerator='Ctrl+F', command=self.refresh)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='Exit', compound='left', 
                                    accelerator='Ctrl+X', command=self.ex)
@@ -67,8 +72,11 @@ class Bless(S_at):
         # Edit menu
         self.edit_menu.add_command(label='Copy', accelerator='Ctrl+C',
                                    compound='left', command=self.copy)
+        self.edit_menu.add_command(label='Paste', accelerator='Ctrl+P',
+                                   compound='left', command=self.paste)
         self.edit_menu.add_command(label='Delete', accelerator='Ctrl+D',
                                    compound='left', command=self.dele)
+        
         
         # Variables to connect within widget.
         self.st1 = StringVar()
@@ -310,6 +318,12 @@ class Bless(S_at):
         self.stbox.event_generate("<<Copy>>")
         return "break"
     
+    def paste(self, event = None):
+        get_c =  self.root.clipboard_get()
+        self.stbox.config(state = "normal")
+        self.stbox.delete('1.0', 'end')
+        self.stbox.insert(END, get_c)
+    
     # Generate Delete Function
     def dele(self, event = None):
         self.stbox.config(state = "normal")
@@ -321,13 +335,15 @@ class Bless(S_at):
     
     # Writing to a .txt file (misc) 
     def write_to_file(self,file_name):
-        sen = str(self.combo.selection_get())
         try:
+            sen = str(self.combo.selection_get())
             content = sen + '\n'+'\n' + self.stbox.get('1.0', 'end')
             with open(file_name, 'w') as the_file:
                 the_file.write(content)
         except:
-            pass
+            content = self.stbox.get('1.0', 'end')
+            with open(file_name, 'w') as the_file:
+                the_file.write(content)
     
     # Generate Save as function dialog
     def save_as(self, event = None):
@@ -339,7 +355,15 @@ class Bless(S_at):
             file_name = input_file_name
             self.write_to_file(file_name)
         return "break"
-                
+    
+    # Refresh list of files in BP
+    def refresh(self, event = None):
+        self.ch_st = []
+        self.combo.config(value = None)
+        for name in os.listdir():
+            if name[-3:] == 'txt':
+                self.ch_st.append(name)
+        self.combo.config(value = self.ch_st)
                 
 
 begin = Tk()
