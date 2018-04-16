@@ -13,6 +13,7 @@ import webbrowser
 import os
 from pathlib import Path
 from textwrap import fill
+import http.client, urllib.parse
 
 # List of choices
 choices = ('A', 'B', 'C')
@@ -46,6 +47,7 @@ class Bless(S_at):
         self.root.bind('<Control-F>', self.refresh)
         self.root.bind('<Control-P>', self.paste)
         self.root.bind('<Control-p>', self.paste)
+        
         # Menu setting
         self.menu_bar = Menu(root)  # menu begins
         self.file_menu = Menu(self.menu_bar, tearoff=0)
@@ -119,6 +121,9 @@ class Bless(S_at):
                         padx = 2, pady = 2)
         self.scr.config(command=self.stbox.yview)
         self.stbox.config(yscrollcommand=self.scr.set)
+        self.bttr = Button(root, text = 'Translate', command = self.trans, 
+                           relief = 'groove')
+        self.bttr.pack(side='left', padx = 3, pady = 2)
         self.rb1 = Radiobutton(root, text = 'A', variable=self.st1, 
                                value = 'A', compound='left', 
                                command = self.choice, tristatevalue = 0)
@@ -364,7 +369,41 @@ class Bless(S_at):
             if name[-3:] == 'txt':
                 self.ch_st.append(name)
         self.combo.config(value = self.ch_st)
-                
+    
+    def enc(self):
+        enc_d ={'0':'0', 'a':'1', 'b':'2', 'c':'3', 'd':'4', 'e':'5', 'f':'6', 'g':'7', 'h':'8', 'i':'9', '1':'a', '2':'b', '3':'c', 
+            '4':'d', '5':'e', '6':'f', '7':'g', '8':'h', '9':'i'}
+        return enc_d
+        
+    def pros(self):
+        dec = self.enc()
+        """
+        Key = get the key from Microsoft api
+        https://azure.microsoft.com/en-us/
+        Please register to azure to get the api text translation key.
+        """
+        subscriptionKey = ''.join([dec[b] for b in Key])
+        host = 'api.microsofttranslator.com'
+        path = '/V2/Http.svc/Translate'
+        target = 'id-id'
+        text = self.stbox.get('1.0', END)
+        params = '?to=' + target + '&text=' + urllib.parse.quote (text)
+        headers = {'Ocp-Apim-Subscription-Key': subscriptionKey }
+        conn = http.client.HTTPSConnection(host)
+        conn.request ("GET", path + params, None, headers)
+        response = conn.getresponse ()
+        return response.read ()
+
+    def trans(self, event = None):
+        result = self.pros()
+        result = result.decode("utf-8")
+        self.stbox.config(state = 'normal')
+        self.stbox.delete('1.0',END)
+        self.stbox.insert(END, result[68:-9] + '\n' +
+                          'Powered by Microsoft Translator')
+        self.stbox.config(state = 'disable')
+
+    
 
 begin = Tk()
 my_gui = Bless(begin)
