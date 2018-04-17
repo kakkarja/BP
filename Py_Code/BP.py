@@ -393,17 +393,16 @@ class Bless(S_at):
         conn.request ("GET", path + params, None, headers)
         response = conn.getresponse ()
         return response.read ()
-
+    
+    # Translate function
     def trans(self, event = None):
         result = self.pros()
         result = result.decode("utf-8")
         self.stbox.config(state = 'normal')
-        self.stbox.delete('1.0',END)
-        self.stbox.insert(END, result[68:-9] + '\n' +
+        self.stbox.insert(END, '\nTranslate to Indonesian: ' + 
+                          result[68:-9] + '\n' +
                           'Powered by Microsoft Translator')
         self.stbox.config(state = 'disable')
-
-    
 
 begin = Tk()
 my_gui = Bless(begin)
