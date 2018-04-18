@@ -382,27 +382,33 @@ class Bless(S_at):
         https://azure.microsoft.com/en-us/
         Please register to azure to get the api text translation key.
         """
-        subscriptionKey = ''.join([dec[b] for b in Key])
-        host = 'api.microsofttranslator.com'
-        path = '/V2/Http.svc/Translate'
-        target = 'id-id'
-        text = self.stbox.get('1.0', END)
-        params = '?to=' + target + '&text=' + urllib.parse.quote (text)
-        headers = {'Ocp-Apim-Subscription-Key': subscriptionKey }
-        conn = http.client.HTTPSConnection(host)
-        conn.request ("GET", path + params, None, headers)
-        response = conn.getresponse ()
-        return response.read ()
+        try:
+            host = 'api.microsofttranslator.com'
+            path = '/V2/Http.svc/Translate'
+            target = 'id-id'
+            text = self.stbox.get('1.0', END)
+            params = '?to=' + target + '&text=' + urllib.parse.quote (text)
+            headers = {'Ocp-Apim-Subscription-Key': subscriptionKey }
+            conn = http.client.HTTPSConnection(host)
+            conn.request ("GET", path + params, None, headers)
+            response = conn.getresponse ()
+            return response.read ()
+        except:
+            mes.showerror('Error', sys.exc_info()[0])
     
     # Translate function
     def trans(self, event = None):
         result = self.pros()
-        result = result.decode("utf-8")
-        self.stbox.config(state = 'normal')
-        self.stbox.insert(END, '\nTranslate to Indonesian: ' + 
-                          result[68:-9] + '\n' +
-                          'Powered by Microsoft Translator')
-        self.stbox.config(state = 'disable')
+        try:
+            result = result.decode("utf-8")
+        except:
+            mes.showerror('Error', sys.exc_info()[0])
+        else:
+            self.stbox.config(state = 'normal')
+            self.stbox.insert(END, '\n' + fill('Translate to Indonesian: ' + 
+                              result[68:-9] )+ '\n' +
+                              'Powered by Microsoft Translator')
+            self.stbox.config(state = 'disable')
 
 begin = Tk()
 my_gui = Bless(begin)
