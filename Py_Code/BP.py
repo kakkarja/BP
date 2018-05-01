@@ -394,7 +394,7 @@ class Bless(S_at):
             response = conn.getresponse ()
             return response.read ()
         except:
-            mes.showerror('Error', sys.exc_info()[0])
+            mes.showerror('Error', sys.exc_info()[0:])
     
     # Translate function
     def trans(self, event = None):
@@ -402,7 +402,7 @@ class Bless(S_at):
         try:
             result = result.decode("utf-8")
         except:
-            mes.showerror('Error', sys.exc_info()[0])
+            mes.showerror('Error', sys.exc_info()[0:])
         else:
             self.stbox.config(state = 'normal')
             self.stbox.insert(END, '\n' + fill('Translate to Indonesian: ' + 
@@ -410,6 +410,7 @@ class Bless(S_at):
                               'Powered by Microsoft Translator')
             self.stbox.config(state = 'disable')
 
-begin = Tk()
-my_gui = Bless(begin)
-begin.mainloop()
+if __name__ == '__main__': 
+    begin = Tk()
+    my_gui = Bless(begin)
+    begin.mainloop()
