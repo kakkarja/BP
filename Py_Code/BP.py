@@ -206,8 +206,7 @@ class Bless(S_at):
                     self.fix_1.append(post_1)
                     post_1 = ''
         self.fix_1 = [self.fix_1[i].replace(',','') 
-                 for i in range(len(self.fix_1))] 
-        
+                 for i in range(len(self.fix_1))]        
         post_2 = ''
         for appen in ch2:
             if appen != '[' != ']':
@@ -371,8 +370,9 @@ class Bless(S_at):
         self.combo.config(value = self.ch_st)
     
     def enc(self):
-        enc_d ={'0':'0', 'a':'1', 'b':'2', 'c':'3', 'd':'4', 'e':'5', 'f':'6', 'g':'7', 'h':'8', 'i':'9', '1':'a', '2':'b', '3':'c', 
-            '4':'d', '5':'e', '6':'f', '7':'g', '8':'h', '9':'i'}
+        enc_d ={'0':'0', 'a':'1', 'b':'2', 'c':'3', 'd':'4', 'e':'5', 'f':'6',
+                'g':'7', 'h':'8', 'i':'9','1':'a', '2':'b', '3':'c', '4':'d',
+                '5':'e', '6':'f', '7':'g', '8':'h', '9':'i'}
         return enc_d
         
     def pros(self):

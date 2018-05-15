@@ -66,6 +66,5 @@ def start_m():
         else:
             break
 
-            
-start_m()
-            
+if __name__ == '__main__':
+    start_m() 
