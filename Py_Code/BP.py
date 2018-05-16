@@ -13,7 +13,8 @@ import webbrowser
 import os
 from pathlib import Path
 from textwrap import fill
-import http.client, urllib.parse
+import requests
+import EncDec as ed
 
 # List of choices
 choices = ('A', 'B', 'C')
@@ -121,7 +122,7 @@ class Bless(S_at):
                         padx = 2, pady = 2)
         self.scr.config(command=self.stbox.yview)
         self.stbox.config(yscrollcommand=self.scr.set)
-        self.bttr = Button(root, text = 'Translate', command = self.trans, 
+        self.bttr = Button(root, text = 'Dictionary', command = self.trans, 
                            relief = 'groove')
         self.bttr.pack(side='left', padx = 3, pady = 2)
         self.rb1 = Radiobutton(root, text = 'A', variable=self.st1, 
@@ -206,7 +207,8 @@ class Bless(S_at):
                     self.fix_1.append(post_1)
                     post_1 = ''
         self.fix_1 = [self.fix_1[i].replace(',','') 
-                 for i in range(len(self.fix_1))]        
+                 for i in range(len(self.fix_1))] 
+        
         post_2 = ''
         for appen in ch2:
             if appen != '[' != ']':
@@ -313,14 +315,15 @@ class Bless(S_at):
     # Select all text content
     def select_all(self):
         self.stbox.tag_add('sel', '1.0', 'end')
-        return "break"
             
     # Generate Copy Function
     def copy(self, event = None):
-        self.root.clipboard_clear()
-        self.select_all()
-        self.stbox.event_generate("<<Copy>>")
-        return "break"
+        if self.stbox.get('3.0', '3.11') == 'Definition:':
+            mes.showinfo('Copy','Not allowed to be copied!')
+        else:
+            self.root.clipboard_clear()
+            self.select_all()
+            self.stbox.event_generate("<<Copy>>")   
     
     def paste(self, event = None):
         get_c =  self.root.clipboard_get()
@@ -351,14 +354,16 @@ class Bless(S_at):
     
     # Generate Save as function dialog
     def save_as(self, event = None):
-        input_file_name = fil.asksaveasfilename(
-                defaultextension=".txt",
-                filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
-        if input_file_name:
-            global file_name
-            file_name = input_file_name
-            self.write_to_file(file_name)
-        return "break"
+        if self.stbox.get('3.0', '3.11') != 'Definition:':
+            input_file_name = fil.asksaveasfilename(
+                    defaultextension=".txt",
+                    filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
+            if input_file_name:
+                global file_name
+                file_name = input_file_name
+                self.write_to_file(file_name)
+        else:
+            mes.showinfo('Save as','Not allowed to be saved!')
     
     # Refresh list of files in BP
     def refresh(self, event = None):
@@ -368,48 +373,57 @@ class Bless(S_at):
             if name[-3:] == 'txt':
                 self.ch_st.append(name)
         self.combo.config(value = self.ch_st)
-    
-    def enc(self):
-        enc_d ={'0':'0', 'a':'1', 'b':'2', 'c':'3', 'd':'4', 'e':'5', 'f':'6',
-                'g':'7', 'h':'8', 'i':'9','1':'a', '2':'b', '3':'c', '4':'d',
-                '5':'e', '6':'f', '7':'g', '8':'h', '9':'i'}
-        return enc_d
-        
-    def pros(self):
-        dec = self.enc()
-        """
-        Key = get the key from Microsoft api
-        https://azure.microsoft.com/en-us/
-        Please register to azure to get the api text translation key.
-        """
-        try:
-            host = 'api.microsofttranslator.com'
-            path = '/V2/Http.svc/Translate'
-            target = 'id-id'
-            text = self.stbox.get('1.0', END)
-            params = '?to=' + target + '&text=' + urllib.parse.quote (text)
-            headers = {'Ocp-Apim-Subscription-Key': subscriptionKey }
-            conn = http.client.HTTPSConnection(host)
-            conn.request ("GET", path + params, None, headers)
-            response = conn.getresponse ()
-            return response.read ()
-        except:
-            mes.showerror('Error', sys.exc_info()[0:])
-    
-    # Translate function
+
+    # Dictionary Function
     def trans(self, event = None):
-        result = self.pros()
+        """
+        TODO: replace with your own app_id and app_key
+        Please go to: https://developer.oxforddictionaries.com/
+        to register and get api Oxford Dictionaries.
+        
+        apid = put your api id
+        key = put your api key
+        """
+        language = 'en'
+        kata = self.stbox.get('1.0',END)[:-1]
+        url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/' + language + '/' + kata.lower()
         try:
-            result = result.decode("utf-8")
+            r = requests.get(url, headers = {'app_id': app_id, 'app_key': app_key})
         except:
             mes.showerror('Error', sys.exc_info()[0:])
         else:
-            self.stbox.config(state = 'normal')
-            self.stbox.insert(END, '\n' + fill('Translate to Indonesian: ' + 
-                              result[68:-9] )+ '\n' +
-                              'Powered by Microsoft Translator')
-            self.stbox.config(state = 'disable')
+            try:
+                tra = dict(r.json())
+                tra = tra['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
+            except:
+                mes.showinfo('Dictionary', 'No Definition!')
+            else:
+                self.stbox.config(state = 'normal')
+                self.stbox.insert(END, '\n\n' + fill('Definition: ' + tra ))
+                self.stbox.config(state = 'disable')
 
+        url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/' + language + '/' + kata.lower() + '/synonyms'
+        try:
+            r = requests.get(url, headers = {'app_id': app_id, 'app_key': app_key})
+        except:
+            mes.showerror('Error', sys.exc_info()[0:])
+        else:    
+            try:
+                syn = r.json()
+                sy = list(syn['results'][0]['lexicalEntries'][0]['entries'][0]['senses'])
+                sy = [sy[c]['synonyms']for c in range(len(sy))]
+                s =[]
+                for nym in sy:
+                    for res in nym:
+                        s.append(res['text'])
+            except:
+                mes.showinfo('Synonyms', 'No Synonyms!')
+            else:
+                self.stbox.config(state = 'normal')
+                self.stbox.insert(END, '\n\n' + fill('Synonyms: ' + str(s)) + '\n\n' +
+                                  'Powered by Oxford Dictionaries')
+                self.stbox.config(state = 'disable')
+            
 if __name__ == '__main__': 
     begin = Tk()
     my_gui = Bless(begin)
