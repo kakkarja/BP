@@ -1,3 +1,5 @@
+# THIS REPOSITORY IS ARCHIVED. VISIT ![Story Maker](https://github.com/kakkarja/Story_Maker) FOR RENEW VERSION 🙏
+
 # BP (Blessing Project) built-up with Tkinter and pyinstaller (.exe file).
 ### **These applications are to create devotion story and can interact with users with reader app to make choices.**
 ## NEW: Dictionary, powered by Oxford Dictionaries
